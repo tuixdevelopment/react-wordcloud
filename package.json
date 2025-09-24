@@ -15,10 +15,7 @@
   ],
   "scripts": {
     "build": "microbundle --jsx React.createElement",
-    "build:docs": "docz build",
     "clean": "rm -rf dist",
-    "clean:docs": "rm -rf .docz",
-    "docs": "docz dev",
     "lint": "xo --fix; tsc",
     "prepare": "npm run clean; npm run build"
   },
@@ -53,18 +50,18 @@
     "@types/lodash.clonedeep": "^4.5.6",
     "@types/lodash.debounce": "^4.0.6",
     "@types/seedrandom": "^2.4.28",
-    "docz": "^2.3.1",
     "eslint-config-xo-react": "^0.23.0",
     "eslint-config-xo-typescript": "^0.31.0",
     "husky": "^4.2.5",
     "microbundle": "^0.12.3",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "typescript": "^3.8.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.4.0",
     "xo": "^0.32.1"
   },
   "peerDependencies": {
-    "react": "^16.13.0"
+  "react": ">=16.13.0 <19",
+  "react-dom": ">=16.13.0 <19"
   },
   "husky": {
     "hooks": {
