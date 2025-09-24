@@ -1,12 +1,9 @@
 {
-  "name": "react-wordcloud",
-  "version": "1.2.7",
-  "description": "Simple React + D3 wordcloud component with powerful features.",
+  "name": "react-wordcloud-tuix",
+  "version": "0.0.1",
+  "description": "react-wordcloud component adapted",
   "license": "MIT",
-  "homepage": "https://react-wordcloud.netlify.com/",
-  "repository": "chrisrzhou/react-wordcloud",
-  "bugs": "https://github.com/chrisrzhou/react-wordcloud/issues",
-  "author": "Chris Zhou <chrisrzhou@pm.me> (https://chrisrzhou.io)",
+  "author": "react-wordcloud-tuix",
   "keywords": [
     "react",
     "wordcloud",
@@ -16,7 +13,6 @@
   "scripts": {
     "build": "microbundle --jsx React.createElement",
     "clean": "rm -rf dist",
-    "lint": "xo --fix; tsc",
     "prepare": "npm run clean; npm run build"
   },
   "main": "dist/index.js",

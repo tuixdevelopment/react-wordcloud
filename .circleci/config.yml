@@ -1,0 +1,68 @@
+
+version: 2.1
+
+workflows:
+  git_deploy:
+    jobs:
+      - build
+      - build-and-publish:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
+
+jobs:
+
+  build:
+    working_directory: ~/app
+    docker:
+      - image: cimg/node:18.20
+    resource_class: small
+    steps:
+      - checkout
+      - run:
+          name: npm install
+          command: npm install
+      - run:
+          name: npm run build
+          command: npm run build
+      - persist_to_workspace:
+          paths:
+            - ./*
+          root: ~/app
+
+  build-and-publish:
+    working_directory: ~/app
+    docker:
+      - image: cimg/node:18.20
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: install dependencies
+          command: apk update && apk add git && apk add openssh-client && apk add jq && apk add aws-cli
+      - add_ssh_keys:
+          fingerprints:
+            - "a1:a0:00:b4:59:8d:34:81:9c:d8:ac:25:cc:e5:93:00"
+      - run:
+          name: config git
+          command: git config --global user.email "pipeline@tuix.ch" && git config --global user.name "Pipeline"
+      - run:
+          name: add github.com as known host
+          command: |
+            touch ~/.ssh/known_hosts
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - run:
+          name: set up .npmrc
+          command: |
+            echo "registry=https://registry.npmjs.org/" >> .npmrc
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+            echo "always-auth=true" >> .npmrc
+      - run:
+          name: read .npmrc
+          command: cat .npmrc
+      - run:
+          name: update and publish package
+          command: ./bin/publish.sh
