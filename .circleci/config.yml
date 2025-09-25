@@ -6,6 +6,8 @@ workflows:
     jobs:
       - build
       - build-and-publish:
+          context:
+            - global
           requires:
             - build
           filters:
