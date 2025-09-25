@@ -45,17 +45,6 @@ jobs:
       - run:
           name: install dependencies
           command: apk update && apk add git && apk add openssh-client && apk add jq && apk add aws-cli
-      - add_ssh_keys:
-          fingerprints:
-            - "a1:a0:00:b4:59:8d:34:81:9c:d8:ac:25:cc:e5:93:00"
-      - run:
-          name: config git
-          command: git config --global user.email "pipeline@tuix.ch" && git config --global user.name "Pipeline"
-      - run:
-          name: add github.com as known host
-          command: |
-            touch ~/.ssh/known_hosts
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
       - run:
           name: set up .npmrc
           command: |
