@@ -10,7 +10,7 @@ workflows:
             - build
           filters:
             branches:
-              only: main
+              only: TUIX-592-udpdate-to-react-18
 
 jobs:
 
