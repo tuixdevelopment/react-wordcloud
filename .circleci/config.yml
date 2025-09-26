@@ -1,0 +1,59 @@
+
+version: 2.1
+
+workflows:
+  git_deploy:
+    jobs:
+      - build
+      - build-and-publish:
+          context:
+            - global
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
+
+jobs:
+
+  build:
+    working_directory: ~/app
+    docker:
+      - image: node:22-alpine
+    resource_class: small
+    steps:
+      - checkout
+      - run:
+          name: npm install
+          command: npm install
+      - run:
+          name: npm run build
+          command: npm run build
+      - persist_to_workspace:
+          paths:
+            - ./*
+          root: ~/app
+
+  build-and-publish:
+    working_directory: ~/app
+    docker:
+      - image: node:22-alpine
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: install dependencies
+          command: apk update && apk add jq
+      - run:
+          name: set up .npmrc
+          command: |
+            echo "registry=https://registry.npmjs.org/" >> .npmrc
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+            echo "always-auth=true" >> .npmrc
+      - run:
+          name: read .npmrc
+          command: cat .npmrc
+      - run:
+          name: update and publish package
+          command: ./bin/publish.sh
